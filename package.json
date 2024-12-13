@@ -1,0 +1,13 @@
+{
+  "name": "node-first-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {},
+  "author": "satin",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.2"
+  }
+}
