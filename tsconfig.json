@@ -1,4 +1,16 @@
 {
-    "files": [],
-    "references": [{"path": "./tsconfig.app.json"}, {"path": "./tsconfig.node.json"}]
+    "extends": "@tsconfig/node-lts/tsconfig.json",
+    "compilerOptions": {
+        "outDir": "dist",
+        "baseUrl": "./server",
+        "paths": {
+            "@/*": ["*"]
+        },
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedSideEffectImports": true
+    },
+    "include": ["server"],
+    "exclude": ["node_modules"]
 }
