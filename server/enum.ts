@@ -1,7 +1,7 @@
 export enum ROUTES {
-    home = '/',
-    users = '/users',
-    createUser = '/create-user'
+    shop = '/',
+    product = '/product',
+    addProduct = '/add-product'
 }
 
 export enum METHODS {

@@ -1,2 +1,7 @@
+import path from 'path';
+
 export const PORT = 3000;
-export const SEPARATOR = '\n';
+
+export const ROOT_DIR = __dirname;
+export const PUBLIC_DIR = 'public';
+export const VIEWS_PATH = path.join(ROOT_DIR, 'views');

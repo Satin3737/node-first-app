@@ -5,11 +5,7 @@
         "baseUrl": "./server",
         "paths": {
             "@/*": ["*"]
-        },
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "noFallthroughCasesInSwitch": true,
-        "noUncheckedSideEffectImports": true
+        }
     },
     "include": ["server"],
     "exclude": ["node_modules"]

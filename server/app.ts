@@ -1,7 +1,14 @@
-import http from 'node:http';
-import {PORT} from '@/const';
-import {requestHandler} from '@/routes';
+import express from 'express';
+import {PORT, PUBLIC_DIR} from '@/const';
+import notFoundRouter from '@/routes/404';
+import productRouter from '@/routes/product';
+import shopRouter from '@/routes/shop';
 
-const server = http.createServer((req, res) => requestHandler(req, res));
+const app = express();
 
-server.listen(3000, () => console.log(`Server running on http://localhost:${PORT}`));
+const middlewares = [express.urlencoded({extended: true}), express.static(PUBLIC_DIR)];
+const appRoutes = [shopRouter, productRouter, notFoundRouter];
+
+app.use([...middlewares, ...appRoutes]);
+
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
