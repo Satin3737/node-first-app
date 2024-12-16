@@ -1,0 +1,23 @@
+extends layout/page
+
+block styles
+    link(rel="stylesheet" href="/css/forms.css")
+
+block content
+    main
+        h1 #{title}
+        if products.length > 0
+            .grid
+                each product in products
+                    article.card.product-item
+                        header.card__header
+                            h1.product__title #{product.title}
+                        .card__image
+                            img(src="https://via.placeholder.com/300" alt="image")
+                        .card__content
+                            h2.product__price $19.99
+                            p.product__description A short product description goes here.
+                        .card__actions
+                            button.btn Add to Cart
+        else
+            p No products found. Please start adding some.

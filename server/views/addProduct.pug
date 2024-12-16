@@ -1,0 +1,14 @@
+extends layout/page
+
+block styles
+    link(rel="stylesheet" href="/css/product.css")
+    link(rel="stylesheet" href="/css/forms.css")
+
+block content
+    main
+        h1 #{title}
+        form.product-form(action="/product" method="POST")
+            .form-control
+                label(for="title") Title
+                input(type="text" name="title" id="title")
+            button(type="submit") Add Product

@@ -1,16 +1,22 @@
 import {Router} from 'express';
-import path from 'path';
 import {ROUTES} from '@/enum';
-import {VIEWS_PATH} from '@/const';
 
 const productRouter = Router();
 
+type ITitle = string | undefined;
+interface IProduct {
+    title: ITitle;
+}
+
+export const PRODUCTS: IProduct[] = [];
+
 productRouter.get(ROUTES.addProduct, (_, res) => {
-    res.sendFile(path.join(VIEWS_PATH, 'addProduct.html'));
+    res.render('addProduct', {title: 'Add Product', path: ROUTES.addProduct});
 });
 
 productRouter.post(ROUTES.product, (req, res) => {
-    console.log(req.body);
+    const title: ITitle = req?.body?.title;
+    !!title && PRODUCTS.push({title});
     res.redirect(ROUTES.shop);
 });
 

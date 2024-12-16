@@ -1,12 +1,11 @@
 import {Router} from 'express';
-import path from 'path';
 import {ROUTES} from '@/enum';
-import {VIEWS_PATH} from '@/const';
+import {PRODUCTS} from '@/routes/product';
 
 const shopRouter = Router();
 
 shopRouter.get(ROUTES.shop, (_, res) => {
-    res.sendFile(path.join(VIEWS_PATH, 'shop.html'));
+    res.render('shop', {title: 'Shop', path: ROUTES.shop, products: PRODUCTS});
 });
 
 export default shopRouter;
