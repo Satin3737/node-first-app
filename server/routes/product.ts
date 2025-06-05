@@ -4,6 +4,7 @@ import {ROUTES} from '@/enum';
 const productRouter = Router();
 
 type ITitle = string | undefined;
+
 interface IProduct {
     title: ITitle;
 }
@@ -11,7 +12,12 @@ interface IProduct {
 export const PRODUCTS: IProduct[] = [];
 
 productRouter.get(ROUTES.addProduct, (_, res) => {
-    res.render('addProduct', {title: 'Add Product', path: ROUTES.addProduct});
+    res.render('addProduct', {
+        title: 'Add Product',
+        isAddProductPage: true,
+        isFormStyles: true,
+        isProductStyles: true
+    });
 });
 
 productRouter.post(ROUTES.product, (req, res) => {
