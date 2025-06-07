@@ -1,7 +1,7 @@
 import express from 'express';
 import {engine} from 'express-handlebars';
 import {LAYOUTS_DIR, PORT, PUBLIC_DIR, VIEWS_DIR} from '@/const';
-import notFoundRouter from '@/routes/404';
+import notFoundRouter from '@/routes/not-found';
 import productRouter from '@/routes/product';
 import shopRouter from '@/routes/shop';
 
