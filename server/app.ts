@@ -1,28 +1,17 @@
 import express from 'express';
-import {engine} from 'express-handlebars';
-import {LAYOUTS_DIR, PORT, PUBLIC_DIR, VIEWS_DIR} from '@/const';
+import {PORT, PUBLIC_DIR, VIEWS_DIR} from '@/const';
+import adminRouter from '@/routes/admin';
 import notFoundRouter from '@/routes/not-found';
-import productRouter from '@/routes/product';
 import shopRouter from '@/routes/shop';
 
 const app = express();
 
 app.set('title', 'NodeJS');
-
-app.engine(
-    'hbs',
-    engine({
-        extname: 'hbs',
-        defaultLayout: 'page',
-        layoutsDir: LAYOUTS_DIR
-    })
-);
-
-app.set('view engine', 'hbs');
+app.set('view engine', 'ejs');
 app.set('views', VIEWS_DIR);
 
 const middlewares = [express.urlencoded({extended: true}), express.static(PUBLIC_DIR)];
-const appRoutes = [shopRouter, productRouter, notFoundRouter];
+const appRoutes = [shopRouter, adminRouter, notFoundRouter];
 
 app.use([...middlewares, ...appRoutes]);
 
