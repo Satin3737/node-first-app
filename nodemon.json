@@ -1,6 +1,6 @@
 {
-    "watch": ["server"],
-    "ignore": ["public", "node_modules", "server/data"],
+    "watch": ["src"],
+    "ignore": ["public", "node_modules", "src/data"],
     "ext": "ts,js,json,ejs",
-    "exec": "ts-node -r tsconfig-paths/register server/app.ts"
+    "exec": "tsx -r tsconfig-paths/register src/app.ts"
 }

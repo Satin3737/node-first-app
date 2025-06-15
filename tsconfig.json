@@ -1,12 +1,12 @@
 {
     "extends": "@tsconfig/node-lts/tsconfig.json",
     "compilerOptions": {
-        "outDir": "dist",
-        "baseUrl": "./server",
+        "outDir": "./dist",
+        "baseUrl": ".",
         "paths": {
-            "@/*": ["*"]
+            "@/*": ["src/*"]
         }
     },
-    "include": ["server"],
-    "exclude": ["node_modules"]
+    "include": ["src"],
+    "exclude": ["node_modules", "dist", "public"]
 }

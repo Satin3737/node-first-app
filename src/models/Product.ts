@@ -61,7 +61,9 @@ export class Product implements IProduct {
         });
     }
 
-    public static fetchAll(cb: Function) {
+    public static fetchAll(cb: (products: Product[]) => void) {
+        if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, {recursive: true});
+
         fs.readFile(Product.filePath, (_, data) => {
             try {
                 const parsedData = data?.length ? JSON.parse(data.toString()) : undefined;
@@ -73,10 +75,10 @@ export class Product implements IProduct {
         });
     }
 
-    public static fetchById(id: string, cb: Function) {
+    public static fetchById(id: string, cb: (product: Product) => void) {
         Product.fetchAll((products: Product[]) => {
             const product = products.find(prod => prod.id === id);
-            cb(product);
+            !!product && cb(product);
         });
     }
 
@@ -88,8 +90,8 @@ export class Product implements IProduct {
             title: rawData?.title ?? '',
             imageUrl: rawData?.imageUrl ?? '',
             description: rawData?.description ?? '',
-            price: Number(rawData?.price) ?? 0,
-            quantity: Number(rawData?.quantity) ?? 1
+            price: Number(rawData?.price) || 0,
+            quantity: Number(rawData?.quantity) || 1
         });
     }
 
@@ -99,8 +101,8 @@ export class Product implements IProduct {
             title: data?.['title'] ?? '',
             imageUrl: data?.['imageUrl'] ?? '',
             description: data?.['description'] ?? '',
-            price: Number(data?.['price']) ?? 0,
-            quantity: Number(data?.['quantity']) ?? 1
+            price: Number(data?.['price']) || 0,
+            quantity: Number(data?.['quantity']) || 1
         });
     }
 

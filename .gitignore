@@ -1,5 +1,6 @@
+.env
 .idea
 node_modules
 dist
 users.txt
-server/data
+src/data

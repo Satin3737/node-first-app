@@ -1,26 +1,38 @@
 {
     "name": "node-first-app",
     "version": "1.0.0",
-    "main": "index.js",
+    "main": "dist/app.js",
     "scripts": {
-        "dev": "nodemon -r tsconfig-paths/register server/app.ts"
+        "dev": "nodemon",
+        "lint": "npx eslint .",
+        "start": "node dist/app.js",
+        "build": "npm run lint && esbuild src/app.ts --bundle --minify --sourcemap --platform=node src/views/**/* --loader:.ejs=copy --outdir=dist"
     },
     "author": "satin",
     "license": "ISC",
     "description": "",
     "dependencies": {
         "ejs": "^3.1.10",
-        "express": "^5.1.0"
+        "express": "^5.1.0",
+        "mysql2": "^3.14.1",
+        "sequelize": "^6.37.7"
     },
     "devDependencies": {
+        "@eslint/js": "^9.29.0",
         "@trivago/prettier-plugin-sort-imports": "^5.2.2",
         "@tsconfig/node-lts": "^22.0.1",
         "@types/express": "^5.0.3",
+        "@types/mysql": "^2.15.27",
         "@types/node": "^24.0.1",
+        "esbuild": "^0.25.5",
+        "eslint": "^9.29.0",
+        "globals": "^16.2.0",
+        "jiti": "^2.4.2",
         "nodemon": "^3.1.10",
         "prettier": "^3.5.3",
-        "ts-node": "^10.9.2",
         "tsconfig-paths": "^4.2.0",
-        "typescript": "^5.8.3"
+        "tsx": "^4.20.3",
+        "typescript": "^5.8.3",
+        "typescript-eslint": "^8.34.0"
     }
 }

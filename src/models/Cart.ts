@@ -60,7 +60,7 @@ export class Cart implements ICart {
         });
     }
 
-    static fetchCart(cb: Function) {
+    static fetchCart(cb: (cart: Cart) => void) {
         fs.readFile(Cart.filePath, (_, data) => {
             try {
                 cb(data?.length ? Cart.fromJson(data.toString()) : new Cart({products: [], totalPrice: 0}));
@@ -76,7 +76,7 @@ export class Cart implements ICart {
 
         return new Cart({
             products: rawData?.products?.map((product: Partial<Product>) => Product.fromObject(product)) ?? [],
-            totalPrice: Number(rawData?.totalPrice) ?? 0
+            totalPrice: Number(rawData?.totalPrice) || 0
         });
     }
 

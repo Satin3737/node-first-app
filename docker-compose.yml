@@ -1,0 +1,28 @@
+services:
+    app:
+        build:
+            context: ./
+        ports:
+            - "3000:3000"
+        depends_on:
+            - db
+        networks:
+            - app-network
+        env_file:
+            - .env
+        volumes:
+            - ./:/app
+            - /app/node_modules
+    db:
+        image: mysql:8.4
+        ports:
+            - "3306:3306"
+        env_file:
+            - .env
+        volumes:
+            - /var/lib/mysql
+        networks:
+            - app-network
+
+networks:
+    app-network:
