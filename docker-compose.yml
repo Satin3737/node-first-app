@@ -1,11 +1,12 @@
 services:
-    app:
+    nodefirstapp-backend:
         build:
             context: ./
         ports:
             - "3000:3000"
         depends_on:
-            - db
+            nodefirstapp-mysql:
+                condition: service_healthy
         networks:
             - app-network
         env_file:
@@ -13,7 +14,7 @@ services:
         volumes:
             - ./:/app
             - /app/node_modules
-    db:
+    nodefirstapp-mysql:
         image: mysql:8.4
         ports:
             - "3306:3306"
@@ -23,6 +24,11 @@ services:
             - /var/lib/mysql
         networks:
             - app-network
+        healthcheck:
+            test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+            retries: 10
+            interval: 3s
+            timeout: 30s
 
 networks:
     app-network:

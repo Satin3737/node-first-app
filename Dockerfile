@@ -5,7 +5,7 @@ WORKDIR /app
 COPY . .
 
 RUN npm install
-run npm run build
+RUN npm run build
 
 EXPOSE 3000
 
