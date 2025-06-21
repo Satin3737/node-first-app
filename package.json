@@ -6,7 +6,7 @@
         "dev": "tsx watch -r tsconfig-paths/register src/app.ts",
         "lint": "npx eslint .",
         "start": "node dist/app.js",
-        "build": "npm run lint && esbuild src/app.ts --bundle --minify --sourcemap --platform=node src/views/**/* --loader:.ejs=copy --outdir=dist"
+        "build": "npm run lint && tsx esbuild.config.ts"
     },
     "author": "satin",
     "license": "ISC",
@@ -20,18 +20,19 @@
     "devDependencies": {
         "@eslint/js": "^9.29.0",
         "@trivago/prettier-plugin-sort-imports": "^5.2.2",
-        "@tsconfig/node-lts": "^22.0.1",
+        "@tsconfig/node-lts": "^22.0.2",
         "@types/express": "^5.0.3",
         "@types/mysql": "^2.15.27",
         "@types/node": "^24.0.3",
         "esbuild": "^0.25.5",
         "eslint": "^9.29.0",
+        "glob": "^11.0.3",
         "globals": "^16.2.0",
         "jiti": "^2.4.2",
         "prettier": "^3.5.3",
         "tsconfig-paths": "^4.2.0",
         "tsx": "^4.20.3",
         "typescript": "^5.8.3",
-        "typescript-eslint": "^8.34.0"
+        "typescript-eslint": "^8.34.1"
     }
 }

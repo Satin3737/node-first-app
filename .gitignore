@@ -2,5 +2,3 @@
 .idea
 node_modules
 dist
-users.txt
-src/data
