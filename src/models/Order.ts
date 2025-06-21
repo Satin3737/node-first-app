@@ -3,8 +3,6 @@ import Product from '@/models/Product';
 import User from '@/models/User';
 import {
     BelongsToManyAddAssociationMixin,
-    BelongsToManyGetAssociationsMixin,
-    BelongsToManySetAssociationsMixin,
     CreationOptional,
     DataTypes,
     ForeignKey,
@@ -13,15 +11,13 @@ import {
     Model
 } from 'sequelize';
 
-class Cart extends Model<InferAttributes<Cart>, InferCreationAttributes<Cart>> {
+class Order extends Model<InferAttributes<Order>, InferCreationAttributes<Order>> {
     declare id: CreationOptional<number>;
     declare userId: ForeignKey<User['id']>;
-    declare getProducts: BelongsToManyGetAssociationsMixin<Product>;
     declare addProduct: BelongsToManyAddAssociationMixin<Product, Product['id']>;
-    declare setProducts: BelongsToManySetAssociationsMixin<Product, Product['id']>;
 }
 
-Cart.init(
+Order.init(
     {
         id: {
             type: DataTypes.INTEGER,
@@ -32,10 +28,10 @@ Cart.init(
     },
     {
         sequelize: db,
-        modelName: 'cart',
-        tableName: 'carts',
+        modelName: 'order',
+        tableName: 'orders',
         timestamps: false
     }
 );
 
-export default Cart;
+export default Order;
