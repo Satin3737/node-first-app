@@ -4,43 +4,19 @@ import {ROUTES} from '@/enum';
 
 const postProduct: RequestHandler = async (req, res) => {
     try {
-        const data = req?.body;
+        const {id, title, imageUrl, description, price} = req.body;
 
-        if (!data || !data.title || !data.imageUrl || !data.description || !data.price) {
-            res.status(400).send('Invalid product data');
-            return;
+        if (!title || !imageUrl || !description || !price) {
+            return res.status(400).render('other/not-found', {title: 'All fields are required.'});
         }
 
-        if (data.id) {
-            const product = await Product.findByPk(data.id);
-
-            if (!product) {
-                res.status(404).send('Product not found');
-                return;
-            }
-
-            await product.update({
-                title: data.title,
-                imageUrl: data.imageUrl,
-                description: data.description,
-                price: parseFloat(data.price)
-            });
-        } else {
-            const user = req.user;
-            if (!user) return res.status(404).render('other/not-found', {title: 'User not found'});
-
-            await user.createProduct({
-                title: data.title,
-                imageUrl: data.imageUrl,
-                description: data.description,
-                price: parseFloat(data.price)
-            });
-        }
+        const product = new Product({title, imageUrl, description, price});
+        id ? await Product.update(id, product) : await Product.create(product);
 
         res.redirect(ROUTES.adminProducts);
     } catch (error) {
         console.error('Error in postProduct:', error);
-        res.status(500).render('other/not-found', {title: 'Error creating product'});
+        res.status(500).render('other/not-found', {title: 'Failed to save product.'});
     }
 };
 

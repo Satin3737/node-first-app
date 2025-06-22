@@ -5,7 +5,7 @@ import {ROUTES} from '@/enum';
 const deleteProduct: RequestHandler = async (req, res) => {
     try {
         const id = req.body.id;
-        await Product.destroy({where: {id}});
+        await Product.delete(id);
         res.redirect(ROUTES.adminProducts);
     } catch (error) {
         console.error('Error deleting product:', error);

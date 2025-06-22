@@ -4,8 +4,8 @@ import {ROUTES} from '@/enum';
 
 export const getProduct: RequestHandler = async (req, res) => {
     try {
-        const productId = req.params.productId;
-        const product = await Product.findByPk(productId);
+        const id = req.params.productId;
+        const product = await Product.findById(id);
 
         if (!product) res.status(404).render('other/not-found', {title: 'Page Not Found'});
 

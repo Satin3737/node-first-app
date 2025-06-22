@@ -1,59 +1,51 @@
 import db from '@/database/db';
-import CartItem from '@/models/CartItem';
-import OrderItem from '@/models/OrderItem';
-import User from '@/models/User';
-import {
-    CreationOptional,
-    DataTypes,
-    ForeignKey,
-    InferAttributes,
-    InferCreationAttributes,
-    Model,
-    NonAttribute
-} from 'sequelize';
+import {ObjectId} from 'mongodb';
+import {COLLECTIONS} from '@/enum';
 
-class Product extends Model<InferAttributes<Product>, InferCreationAttributes<Product>> {
-    declare id: CreationOptional<number>;
+interface IProduct {
+    title: string;
+    imageUrl: string;
+    description: string;
+    price: number;
+}
+
+class Product implements IProduct {
     declare title: string;
     declare imageUrl: string;
     declare description: string;
     declare price: number;
-    declare userId: ForeignKey<User['id']>;
-    declare cartItem: NonAttribute<CartItem>;
-    declare orderItem: NonAttribute<OrderItem>;
-}
 
-Product.init(
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-            allowNull: false
-        },
-        title: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        imageUrl: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        description: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        price: {
-            type: DataTypes.DOUBLE,
-            allowNull: false
-        }
-    },
-    {
-        sequelize: db,
-        modelName: 'product',
-        tableName: 'products',
-        timestamps: false
+    constructor({title, price, imageUrl, description}: IProduct) {
+        this.title = title;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.description = description;
     }
-);
+
+    static getId(id: string) {
+        if (!ObjectId.isValid(id)) throw new Error('Invalid ID format');
+        return new ObjectId(id);
+    }
+
+    static create(product: Product) {
+        return db.collection<Product>(COLLECTIONS.products).insertOne(product);
+    }
+
+    static update(id: string, productData: Partial<Product>) {
+        return db.collection<Product>(COLLECTIONS.products).updateOne({_id: this.getId(id)}, {$set: productData});
+    }
+
+    static delete(id: string) {
+        return db.collection<Product>(COLLECTIONS.products).deleteOne({_id: this.getId(id)});
+    }
+
+    static findAll() {
+        return db.collection<Product>(COLLECTIONS.products).find().toArray();
+    }
+
+    static findById(id: string) {
+        return db.collection<Product>(COLLECTIONS.products).findOne({_id: this.getId(id)});
+    }
+}
 
 export default Product;

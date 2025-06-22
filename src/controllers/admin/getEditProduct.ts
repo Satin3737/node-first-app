@@ -1,20 +1,18 @@
+import Product from '@/models/Product';
 import {RequestHandler} from 'express';
-import {ROUTES} from '@/enum';
 
 const getEditProduct: RequestHandler = async (req, res) => {
     try {
         const id = req.params.productId;
-        const user = req.user;
-        if (!user) return res.status(404).render('other/not-found', {title: 'User not found'});
+        const product = await Product.findById(id);
 
-        const product = await user.getProducts({where: {id}});
-        if (!product.length) return res.redirect(ROUTES.adminProducts);
+        if (!product) res.status(404).render('other/not-found', {title: 'Page Not Found'});
 
         res.render('admin/manage-product', {
             path: '/admin/edit-product',
             title: 'Edit Product',
             editing: true,
-            product: product[0]
+            product
         });
     } catch (error) {
         console.error('Error in getEditProduct:', error);
