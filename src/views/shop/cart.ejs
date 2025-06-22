@@ -16,7 +16,7 @@
                         <p>Quantity: <%= product.cartItem.quantity %></p>
                         <p>Total: $<%= (product.price * product.cartItem.quantity).toFixed(2) %></p>
                         <form action="/cart/remove" method="POST">
-                            <input type="hidden" name="id" value="<%= product.id %>">
+                            <input type="hidden" name="id" value="<%= product._id %>">
                             <button class="btn danger" type="submit">Delete</button>
                         </form>
                     </li>
