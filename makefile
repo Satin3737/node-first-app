@@ -1,12 +1,7 @@
-start:
-	make install
-	make up
-
-install:
-	npm install
+preview ?= false
 
 up:
-	docker compose up --build
+	PROD_PREVIEW=${preview} docker compose up
 
 clear:
 	docker compose down --rmi all

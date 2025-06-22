@@ -1,34 +1,33 @@
 services:
     nodefirstapp-backend:
-        build:
-            context: ./
+        image: node:lts
         ports:
             - "3000:3000"
-        depends_on:
-            nodefirstapp-mysql:
-                condition: service_healthy
-        networks:
-            - app-network
-        env_file:
-            - .env
+        working_dir: /app
         volumes:
             - ./:/app
-            - /app/node_modules
-    nodefirstapp-mysql:
-        image: mysql:8.4
-        ports:
-            - "3306:3306"
-        env_file:
-            - .env
-        volumes:
-            - /var/lib/mysql
+        depends_on:
+            - nodefirstapp-mongodb
         networks:
             - app-network
-        healthcheck:
-            test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-            retries: 10
-            interval: 3s
-            timeout: 30s
+        command: >
+            sh -c 
+            "if [ \"$PROD_PREVIEW\" = \"true\" ]; 
+            then npm install && npm run build && npm run start; 
+            else npm install && npm run dev; 
+            fi"
+    nodefirstapp-mongodb:
+        image: mongo:latest
+        ports:
+            - "27017:27017"
+        volumes:
+            - mongo-volume:/data/db
+        networks:
+            - app-network
+
+volumes:
+    mongo-volume:
+        driver: local
 
 networks:
     app-network:
