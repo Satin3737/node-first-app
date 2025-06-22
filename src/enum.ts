@@ -11,3 +11,12 @@ export enum ROUTES {
     deleteProduct = '/admin/delete-product',
     adminProducts = '/admin/products'
 }
+
+export enum COLLECTIONS {
+    users = 'users',
+    products = 'products',
+    carts = 'carts',
+    orders = 'orders',
+    cartItems = 'cart_items',
+    orderItems = 'order_items'
+}

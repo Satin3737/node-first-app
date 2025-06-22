@@ -1,12 +1,21 @@
-import {Sequelize} from 'sequelize';
+import {MongoClient} from 'mongodb';
 
-const db = new Sequelize({
-    dialect: 'mysql',
-    host: process.env.MYSQL_HOST,
-    username: process.env.MYSQL_USER,
-    database: process.env.MYSQL_DATABASE,
-    password: process.env.MYSQL_PASSWORD,
-    logging: false
-});
+const database = process.env.MONGO_INITDB_DATABASE;
+const host = process.env.DB_HOST;
+const port = process.env.DB_PORT;
+
+if (!database || !host || !port) {
+    console.error('Missing MongoDB environment variables');
+    process.exit(1);
+}
+
+const client = new MongoClient(`mongodb://${host}:${port}/${database}`);
+const db = client.db(database);
+
+try {
+    client.connect().then(() => console.log('Connected to MongoDB'));
+} catch (error) {
+    console.error('Failed to connect to MongoDB:', error);
+}
 
 export default db;
