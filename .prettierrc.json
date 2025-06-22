@@ -11,8 +11,6 @@
         "<THIRD_PARTY_MODULES>",
         "^@/enum(.*)$",
         "^@/const(.*)$",
-        "^@/helper(.*)$",
-        "^@/util(.*)$",
         "^@/routes(.*)$",
         "^@/controllers(.*)$",
         "^[./]"
