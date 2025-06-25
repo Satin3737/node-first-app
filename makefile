@@ -1,4 +1,4 @@
-preview ?= false
+preview ?= 0
 
 up:
 	PROD_PREVIEW=${preview} docker compose up

@@ -1,33 +1,32 @@
 services:
     nodefirstapp-backend:
         image: node:lts
+        working_dir: /app
+        entrypoint: ["/bin/bash", "/app/bash/node-entrypoint.sh"]
         ports:
             - "3000:3000"
-        working_dir: /app
         volumes:
             - ./:/app
-        depends_on:
-            - nodefirstapp-mongodb
         networks:
             - app-network
-        command: >
-            sh -c 
-            "if [ \"$PROD_PREVIEW\" = \"true\" ]; 
-            then npm install && npm run build && npm run start; 
-            else npm install && npm run dev; 
-            fi"
+        environment:
+            - PROD_PREVIEW=${PROD_PREVIEW}
+        depends_on:
+            - nodefirstapp-mongodb
+
     nodefirstapp-mongodb:
         image: mongo:latest
         ports:
             - "27017:27017"
         volumes:
             - mongo-volume:/data/db
+            - ./logs:/logs
         networks:
             - app-network
+        command: --quiet --logappend --logpath "/logs/mongo.log"
 
 volumes:
     mongo-volume:
-        driver: local
 
 networks:
     app-network:
