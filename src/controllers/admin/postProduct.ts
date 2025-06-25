@@ -1,4 +1,5 @@
 import Product from '@/models/Product';
+import logger from '@/utils/logger';
 import {RequestHandler} from 'express';
 import {ROUTES} from '@/enum';
 
@@ -15,7 +16,7 @@ const postProduct: RequestHandler = async (req, res) => {
 
         res.redirect(ROUTES.adminProducts);
     } catch (error) {
-        console.error('Error in postProduct:', error);
+        logger.error(error, 'Error in Error in postProduct');
         res.status(500).render('other/not-found', {title: 'Failed to save product.'});
     }
 };

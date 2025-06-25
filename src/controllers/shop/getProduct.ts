@@ -1,4 +1,5 @@
 import Product from '@/models/Product';
+import logger from '@/utils/logger';
 import {RequestHandler} from 'express';
 import {ROUTES} from '@/enum';
 
@@ -15,7 +16,7 @@ export const getProduct: RequestHandler = async (req, res) => {
             product
         });
     } catch (error) {
-        console.error('Error fetching product:', error);
+        logger.error(error, 'Error fetching product');
         res.status(500).render('other/not-found', {title: 'Failed to load product.'});
     }
 };

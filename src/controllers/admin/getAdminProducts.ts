@@ -1,4 +1,5 @@
 import Product from '@/models/Product';
+import logger from '@/utils/logger';
 import {RequestHandler} from 'express';
 import {ROUTES} from '@/enum';
 
@@ -11,7 +12,7 @@ const getAdminProducts: RequestHandler = async (_, res) => {
             products
         });
     } catch (error) {
-        console.error('Error in getAdminProducts:', error);
+        logger.error(error, 'Error in getAdminProducts');
         res.status(500).render('other/not-found', {title: 'Error fetching products'});
     }
 };

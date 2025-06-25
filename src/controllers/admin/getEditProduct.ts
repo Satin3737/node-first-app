@@ -1,4 +1,5 @@
 import Product from '@/models/Product';
+import logger from '@/utils/logger';
 import {RequestHandler} from 'express';
 
 const getEditProduct: RequestHandler = async (req, res) => {
@@ -15,7 +16,7 @@ const getEditProduct: RequestHandler = async (req, res) => {
             product
         });
     } catch (error) {
-        console.error('Error in getEditProduct:', error);
+        logger.error(error, 'Error in getEditProduct');
         res.status(500).render('other/not-found', {title: 'Error fetching product for editing'});
     }
 };
