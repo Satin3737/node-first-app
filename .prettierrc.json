@@ -9,10 +9,15 @@
     "arrowParens": "avoid",
     "importOrder": [
         "<THIRD_PARTY_MODULES>",
-        "^@/enum(.*)$",
+        "^@/database(.*)$",
+        "^@/interfaces(.*)$",
         "^@/const(.*)$",
+        "^@/utils(.*)$",
         "^@/routes(.*)$",
+        "^@/middlewares(.*)$",
+        "^@/schemas(.*)$",
         "^@/controllers(.*)$",
+        "^@/models(.*)$",
         "^[./]"
     ],
     "importOrderSortSpecifiers": true,
