@@ -43,30 +43,22 @@ class Product implements IProduct {
 
     public static async delete(id: string) {
         const _id = getId(id);
-
         const result = await db.collection<Product>(Collections.products).deleteOne({_id});
-
-        if (result.acknowledged) {
-            await db.collection<Cart>(Collections.carts).updateMany(
-                {},
-                {
-                    $pull: {
-                        products: {
-                            ['product._id' as string]: _id
-                        }
-                    }
-                }
-            );
-
-            const carts = await Cart.findAll();
-            for (const cart of carts) await cart.recalculateTotal();
-        }
-
+        if (!result.deletedCount) return result;
+        await db.collection<Cart>(Collections.carts).updateMany({}, {$pull: {products: {productId: _id}}});
         return result;
     }
 
     public static async findAll(): Promise<Product[]> {
         const productsData = await db.collection<Product>(Collections.products).find().toArray();
+        return productsData.map(product => new Product(product));
+    }
+
+    public static async findByIdsArray(ids: ObjectId[]): Promise<Product[]> {
+        const productsData = await db
+            .collection<Product>(Collections.products)
+            .find({_id: {$in: ids}})
+            .toArray();
         return productsData.map(product => new Product(product));
     }
 

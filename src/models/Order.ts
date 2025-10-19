@@ -2,18 +2,17 @@ import {ObjectId} from 'mongodb';
 import db from '@/database/db';
 import {Collections, IId} from '@/interfaces';
 import {getId} from '@/utils';
-import {Product} from '@/models';
 
 interface IOrder {
     _id?: IId;
     userId: ObjectId;
-    products: {product: Product; quantity: number}[];
+    products: {productId: ObjectId; quantity: number}[];
 }
 
 class Order implements IOrder {
     declare public _id: ObjectId;
     declare public readonly userId: ObjectId;
-    declare public products: {product: Product; quantity: number}[];
+    declare public products: {productId: ObjectId; quantity: number}[];
 
     constructor({_id, userId, products}: IOrder) {
         this._id = _id ? (_id instanceof ObjectId ? _id : getId(_id)) : new ObjectId();

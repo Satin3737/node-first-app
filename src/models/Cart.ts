@@ -7,21 +7,18 @@ import {Product} from '@/models';
 interface ICart {
     _id?: IId;
     userId: ObjectId;
-    products: {product: Product; quantity: number}[];
-    totalPrice: number;
+    products: {productId: ObjectId; quantity: number}[];
 }
 
 class Cart implements ICart {
     declare public _id: ObjectId;
     declare public readonly userId: ObjectId;
-    declare public products: {product: Product; quantity: number}[];
-    declare public totalPrice: number;
+    declare public products: {productId: ObjectId; quantity: number}[];
 
-    constructor({_id, userId, products, totalPrice}: ICart) {
+    constructor({_id, userId, products}: ICart) {
         this._id = _id ? (_id instanceof ObjectId ? _id : getId(_id)) : new ObjectId();
         this.userId = userId;
         this.products = products;
-        this.totalPrice = totalPrice;
     }
 
     public async create() {
@@ -31,28 +28,24 @@ class Cart implements ICart {
     }
 
     public addToCart(product: Product) {
-        const existingProductIndex = this.products.findIndex(p => {
-            return p.product._id.toString() === product._id.toString();
+        const existingProductIndex = this.products.findIndex(item => {
+            return item.productId.toString() === product._id.toString();
         });
 
         if (existingProductIndex > -1) {
             this.products[existingProductIndex].quantity += 1;
         } else {
-            this.products.push({product, quantity: 1});
+            this.products.push({productId: product._id, quantity: 1});
         }
-
-        this.totalPrice += product.price;
 
         return this.updateCart();
     }
 
     public removeFromCart(product: Product) {
-        const existingProduct = this.products.find(p => p.product._id.toString() === product._id.toString());
+        const existingProduct = this.products.find(item => item.productId.toString() === product._id.toString());
         if (!existingProduct) return;
 
-        this.totalPrice -= existingProduct.product.price * existingProduct.quantity;
-        this.products = this.products.filter(p => p.product._id.toString() !== product._id.toString());
-
+        this.products = this.products.filter(item => item.productId.toString() !== product._id.toString());
         return this.updateCart();
     }
 
@@ -66,25 +59,15 @@ class Cart implements ICart {
         return cartsData.map(cart => new Cart(cart));
     }
 
-    public async recalculateTotal() {
-        this.totalPrice = this.products.reduce((sum, p) => sum + p.product.price * p.quantity, 0);
-        return await this.updateCart();
-    }
-
     public async clearCart() {
         this.products = [];
-        this.totalPrice = 0;
         return await this.updateCart();
     }
 
     private async updateCart() {
         return await db
             .collection<Cart>(Collections.carts)
-            .updateOne(
-                {userId: this.userId},
-                {$set: {products: this.products, totalPrice: this.totalPrice}},
-                {upsert: true}
-            );
+            .updateOne({userId: this.userId}, {$set: {products: this.products}}, {upsert: true});
     }
 }
 
