@@ -1,25 +1,27 @@
 import {RequestHandler} from 'express';
-import {ROUTES} from '@/enum';
+import {Routes} from '@/interfaces';
+import {logger} from '@/utils';
+import {Cart, Product} from '@/models';
 
 const removeFromCart: RequestHandler = async (req, res) => {
     try {
-        const id = req.body.id;
+        const id = req.body.productId;
 
-        const user = req.user;
-        if (!user) return res.status(404).render('other/not-found', {title: 'User not found'});
+        const userId = req.user?._id;
+        if (!userId) return res.status(404).render('other/not-found', {title: 'User not found'});
 
-        const cart = await user.getCart();
-        if (!cart) await user.createCart();
+        const product = await Product.findById(id);
+        if (!product) return res.status(404).render('other/not-found', {title: 'Product not found'});
 
-        const products = await cart.getProducts({where: {id}});
-        if (!products.length) return res.status(404).render('other/not-found', {title: 'Product not found in cart'});
+        const cartData = await Cart.findByUserId(userId);
+        if (!cartData) return res.status(404).render('other/not-found', {title: 'Cart not found'});
 
-        const product = products[0];
-        await product.cartItem.destroy();
+        const cart = new Cart(cartData);
+        await cart.removeFromCart(product);
 
-        res.redirect(ROUTES.cart);
+        res.redirect(Routes.cart);
     } catch (error) {
-        console.error('Error removing product from cart:', error);
+        logger.error(error, 'Error removing product from cart');
         return res.status(500).render('other/not-found', {title: 'Failed to remove product from cart.'});
     }
 };

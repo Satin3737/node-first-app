@@ -1,32 +1,31 @@
-import Product from '@/models/Product';
 import {RequestHandler} from 'express';
-import {ROUTES} from '@/enum';
+import {Routes} from '@/interfaces';
+import {logger} from '@/utils';
+import {Cart, Product} from '@/models';
 
 const postCart: RequestHandler = async (req, res) => {
     try {
         const id = req.body.productId;
 
-        const user = req.user;
-        if (!user) return res.status(404).render('other/not-found', {title: 'User not found'});
+        const userId = req.user?._id;
+        if (!userId) return res.status(401).render('other/not-found', {title: 'User not found'});
 
-        const cart = await user.getCart();
-        if (!cart) await user.createCart();
+        const product = await Product.findById(id);
+        if (!product) return res.status(404).render('other/not-found', {title: 'Product not found'});
 
-        const products = await cart.getProducts({where: {id}});
+        const cartData = await Cart.findByUserId(userId);
 
-        if (products.length) {
-            const product = products[0];
-            const quantity = product.cartItem.quantity + 1;
-            await cart.addProduct(product, {through: {quantity}});
+        if (cartData) {
+            await new Cart(cartData).addToCart(product);
         } else {
-            const product = await Product.findByPk(id);
-            if (!product) return res.status(404).render('other/not-found', {title: 'Product not found'});
-            await cart.addProduct(product, {through: {quantity: 1}});
+            const cart = new Cart({userId, products: [], totalPrice: 0});
+            await cart.create();
+            await cart.addToCart(product);
         }
 
-        res.redirect(ROUTES.cart);
+        res.redirect(Routes.cart);
     } catch (error) {
-        console.error('Error adding product to cart:', error);
+        logger.error(error, 'Error adding product to cart');
         res.status(500).render('other/not-found', {title: 'Failed to add product to cart.'});
     }
 };

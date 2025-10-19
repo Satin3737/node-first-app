@@ -1,23 +1,22 @@
 import {RequestHandler} from 'express';
-import {ROUTES} from '@/enum';
+import {Routes} from '@/interfaces';
+import {logger} from '@/utils';
+import {Cart} from '@/models';
 
 const getCart: RequestHandler = async (req, res) => {
     try {
         const user = req.user;
-        if (!user) return res.status(404).render('other/not-found', {title: 'User not found'});
+        if (!user) return res.status(401).render('other/not-found', {title: 'User not found'});
 
-        const cart = await user.getCart();
-        if (!cart) await user.createCart();
-
-        const products = await cart.getProducts();
+        const cart = await Cart.findByUserId(user._id);
 
         res.render('shop/cart', {
-            path: ROUTES.cart,
+            path: Routes.cart,
             title: 'Your Cart',
-            products
+            cart: cart || new Cart({userId: user._id, products: [], totalPrice: 0})
         });
     } catch (error) {
-        console.error('Error fetching cart:', error);
+        logger.error(error, 'Error fetching cart');
         res.status(500).render('other/not-found', {title: 'Failed to load cart.'});
     }
 };
