@@ -1,5 +1,5 @@
-import logger from '@/utils/logger';
 import {MongoClient} from 'mongodb';
+import {logger} from '@/utils';
 
 const database = process.env.MONGO_INITDB_DATABASE;
 const host = process.env.DB_HOST;
