@@ -1,29 +1,27 @@
 import {RequestHandler} from 'express';
-import {ROUTES} from '@/enum';
+import {Routes} from '@/interfaces';
+import {logger} from '@/utils';
+import {Cart, Order} from '@/models';
 
 const postOrder: RequestHandler = async (req, res) => {
     try {
-        const user = req.user;
-        if (!user) return res.status(404).render('other/not-found', {title: 'User not found'});
+        const userId = req.user?._id;
+        if (!userId) return res.status(401).render('other/not-found', {title: 'User not found'});
 
-        const cart = await user.getCart();
-        if (!cart) await user.createCart();
+        const cart = await Cart.findByUserId(userId);
+        if (!cart) return res.status(400).render('other/not-found', {title: 'Cart not found'});
 
-        const products = await cart.getProducts();
+        const products = cart.products;
         if (!products.length) return res.status(400).render('other/not-found', {title: 'Cart is empty.'});
 
-        const order = await user.createOrder();
+        const order = await new Order({userId, products}).create();
         if (!order) return res.status(500).render('other/not-found', {title: 'Failed to create order.'});
 
-        for (const product of products) {
-            await order.addProduct(product, {through: {quantity: product.cartItem.quantity}});
-        }
+        await cart.clearCart();
 
-        await cart.setProducts([]);
-
-        res.redirect(ROUTES.orders);
+        res.redirect(Routes.orders);
     } catch (error) {
-        console.error('Error creating order:', error);
+        logger.error(error, 'Error creating order');
         return res.status(500).render('other/not-found', {title: 'Failed to create order.'});
     }
 };
