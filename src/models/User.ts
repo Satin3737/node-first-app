@@ -1,54 +1,35 @@
+import {ObjectId} from 'mongodb';
 import db from '@/database/db';
-import Cart from '@/models/Cart';
-import Order from '@/models/Order';
-import Product from '@/models/Product';
-import {
-    CreationOptional,
-    DataTypes,
-    HasManyCreateAssociationMixin,
-    HasManyGetAssociationsMixin,
-    HasOneGetAssociationMixin,
-    InferAttributes,
-    InferCreationAttributes,
-    Model
-} from 'sequelize';
+import {Collections, IId} from '@/interfaces';
+import {getId} from '@/utils';
 
-class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
-    declare id: CreationOptional<number>;
-    declare name: string;
-    declare email: string;
-    declare createProduct: HasManyCreateAssociationMixin<Product>;
-    declare getProducts: HasManyGetAssociationsMixin<Product>;
-    declare createCart: HasOneGetAssociationMixin<Cart>;
-    declare getCart: HasOneGetAssociationMixin<Cart>;
-    declare createOrder: HasManyCreateAssociationMixin<Order>;
-    declare getOrders: HasManyGetAssociationsMixin<Order>;
+interface IUser {
+    _id?: IId;
+    username: string;
+    email: string;
 }
 
-User.init(
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-            allowNull: false
-        },
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            unique: true
-        }
-    },
-    {
-        sequelize: db,
-        modelName: 'user',
-        tableName: 'users',
-        timestamps: false
+class User implements IUser {
+    declare public _id: ObjectId;
+    declare public username: string;
+    declare public email: string;
+
+    constructor({_id, username, email}: IUser) {
+        this._id = _id ? (_id instanceof ObjectId ? _id : getId(_id)) : new ObjectId();
+        this.username = username;
+        this.email = email;
     }
-);
+
+    public async create() {
+        const result = await db.collection<User>(Collections.users).insertOne(this);
+        this._id = result.insertedId;
+        return result;
+    }
+
+    public static async findById(_id: ObjectId) {
+        const user = await db.collection<User>(Collections.users).findOne({_id});
+        return user ? new User(user) : null;
+    }
+}
 
 export default User;

@@ -1,37 +1,36 @@
+import {ObjectId} from 'mongodb';
 import db from '@/database/db';
-import Product from '@/models/Product';
-import User from '@/models/User';
-import {
-    BelongsToManyAddAssociationMixin,
-    CreationOptional,
-    DataTypes,
-    ForeignKey,
-    InferAttributes,
-    InferCreationAttributes,
-    Model
-} from 'sequelize';
+import {Collections, IId} from '@/interfaces';
+import {getId} from '@/utils';
+import {Product} from '@/models';
 
-class Order extends Model<InferAttributes<Order>, InferCreationAttributes<Order>> {
-    declare id: CreationOptional<number>;
-    declare userId: ForeignKey<User['id']>;
-    declare addProduct: BelongsToManyAddAssociationMixin<Product, Product['id']>;
+interface IOrder {
+    _id?: IId;
+    userId: ObjectId;
+    products: {product: Product; quantity: number}[];
 }
 
-Order.init(
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-            allowNull: false
-        }
-    },
-    {
-        sequelize: db,
-        modelName: 'order',
-        tableName: 'orders',
-        timestamps: false
+class Order implements IOrder {
+    declare public _id: ObjectId;
+    declare public readonly userId: ObjectId;
+    declare public products: {product: Product; quantity: number}[];
+
+    constructor({_id, userId, products}: IOrder) {
+        this._id = _id ? (_id instanceof ObjectId ? _id : getId(_id)) : new ObjectId();
+        this.userId = userId;
+        this.products = products;
     }
-);
+
+    public async create() {
+        const result = await db.collection<Order>(Collections.orders).insertOne(this);
+        this._id = result.insertedId;
+        return result;
+    }
+
+    public static async findByUserId(userId: ObjectId) {
+        const orders = await db.collection<Order>(Collections.orders).find({userId}).toArray();
+        return orders.map(order => new Order(order));
+    }
+}
 
 export default Order;
