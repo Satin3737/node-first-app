@@ -1,7 +1,7 @@
 import {RequestHandler} from 'express';
 import {Routes} from '@/interfaces';
 import {logger} from '@/utils';
-import {Cart, Order} from '@/models';
+import {Cart, Order, Product} from '@/models';
 
 const postOrder: RequestHandler = async (req, res) => {
     try {
@@ -11,8 +11,14 @@ const postOrder: RequestHandler = async (req, res) => {
         const cart = await Cart.findByUserId(userId);
         if (!cart) return res.status(400).render('other/not-found', {title: 'Cart not found'});
 
-        const products = cart.products;
-        if (!products.length) return res.status(400).render('other/not-found', {title: 'Cart is empty.'});
+        const productsData = await Product.findByIdsArray(cart.products.map(item => item.productId));
+
+        const products = cart.products
+            .map(({productId, quantity}) => ({
+                product: productsData.find(prod => prod._id.toString() === productId.toString()),
+                quantity
+            }))
+            .filter((item): item is {product: Product; quantity: number} => Boolean(item.product));
 
         const order = await new Order({userId, products}).create();
         if (!order) return res.status(500).render('other/not-found', {title: 'Failed to create order.'});
