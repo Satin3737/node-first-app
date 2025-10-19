@@ -1,13 +1,13 @@
-import Product from '@/models/Product';
-import logger from '@/utils/logger';
 import {RequestHandler} from 'express';
-import {ROUTES} from '@/enum';
+import {Routes} from '@/interfaces';
+import {logger} from '@/utils';
+import {Product} from '@/models';
 
 const deleteProduct: RequestHandler = async (req, res) => {
     try {
         const id = req.body.id;
         await Product.delete(id);
-        res.redirect(ROUTES.adminProducts);
+        res.redirect(Routes.adminProducts);
     } catch (error) {
         logger.error(error, 'Error deleting product');
         res.status(500).render('other/not-found', {title: 'Error deleting product'});

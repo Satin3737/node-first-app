@@ -1,13 +1,13 @@
-import Product from '@/models/Product';
-import logger from '@/utils/logger';
 import {RequestHandler} from 'express';
+import {logger} from '@/utils';
+import {Product} from '@/models';
 
 const getEditProduct: RequestHandler = async (req, res) => {
     try {
         const id = req.params.productId;
         const product = await Product.findById(id);
 
-        if (!product) res.status(404).render('other/not-found', {title: 'Page Not Found'});
+        if (!product) res.status(404).render('other/not-found', {title: 'Product not found'});
 
         res.render('admin/manage-product', {
             path: '/admin/edit-product',

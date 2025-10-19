@@ -1,20 +1,29 @@
-import Product from '@/models/Product';
-import logger from '@/utils/logger';
 import {RequestHandler} from 'express';
-import {ROUTES} from '@/enum';
+import {z} from 'zod';
+import {Routes} from '@/interfaces';
+import {logger} from '@/utils';
+import {PostProductRequestSchema} from '@/schemas';
+import {Product} from '@/models';
 
 const postProduct: RequestHandler = async (req, res) => {
     try {
-        const {id, title, imageUrl, description, price} = req.body;
+        const userId = req.user?._id;
+        if (!userId) return res.status(401).render('other/not-found', {title: 'Unauthorized access.'});
 
-        if (!title || !imageUrl || !description || !price) {
-            return res.status(400).render('other/not-found', {title: 'All fields are required.'});
+        const {success, data, error} = PostProductRequestSchema.safeParse(req.body);
+
+        if (!success) {
+            return res.status(400).render('other/not-found', {
+                title: 'Invalid product data:',
+                error: z.prettifyError(error)
+            });
         }
 
-        const product = new Product({title, imageUrl, description, price});
-        id ? await Product.update(id, product) : await Product.create(product);
+        const {id, ...restData} = data;
+        const product = new Product({...restData, userId});
+        id ? await Product.update(id, product) : await product.create();
 
-        res.redirect(ROUTES.adminProducts);
+        res.redirect(Routes.adminProducts);
     } catch (error) {
         logger.error(error, 'Error in Error in postProduct');
         res.status(500).render('other/not-found', {title: 'Failed to save product.'});

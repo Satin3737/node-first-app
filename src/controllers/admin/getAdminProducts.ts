@@ -1,13 +1,13 @@
-import Product from '@/models/Product';
-import logger from '@/utils/logger';
 import {RequestHandler} from 'express';
-import {ROUTES} from '@/enum';
+import {Routes} from '@/interfaces';
+import {logger} from '@/utils';
+import {Product} from '@/models';
 
 const getAdminProducts: RequestHandler = async (_, res) => {
     try {
         const products = await Product.findAll();
         res.render('admin/products', {
-            path: ROUTES.adminProducts,
+            path: Routes.adminProducts,
             title: 'Products',
             products
         });

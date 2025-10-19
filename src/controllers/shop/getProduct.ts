@@ -1,7 +1,7 @@
-import Product from '@/models/Product';
-import logger from '@/utils/logger';
 import {RequestHandler} from 'express';
-import {ROUTES} from '@/enum';
+import {Routes} from '@/interfaces';
+import {logger} from '@/utils';
+import {Product} from '@/models';
 
 export const getProduct: RequestHandler = async (req, res) => {
     try {
@@ -11,7 +11,7 @@ export const getProduct: RequestHandler = async (req, res) => {
         if (!product) res.status(404).render('other/not-found', {title: 'Page Not Found'});
 
         res.render('shop/product', {
-            path: ROUTES.shop,
+            path: Routes.shop,
             title: `Product ${product?.title}`,
             product
         });

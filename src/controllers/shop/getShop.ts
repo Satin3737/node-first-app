@@ -1,13 +1,13 @@
-import Product from '@/models/Product';
-import logger from '@/utils/logger';
 import {RequestHandler} from 'express';
-import {ROUTES} from '@/enum';
+import {Routes} from '@/interfaces';
+import {logger} from '@/utils';
+import {Product} from '@/models';
 
 const getShop: RequestHandler = async (_, res) => {
     try {
         const products = await Product.findAll();
         res.render('shop/products', {
-            path: ROUTES.shop,
+            path: Routes.shop,
             title: 'Shop',
             products
         });
