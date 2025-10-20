@@ -24,3 +24,12 @@ export const Collections = {
 } as const;
 
 export type ICollection = IValueOf<typeof Collections>;
+
+export const Models = {
+    user: 'User',
+    product: 'Product',
+    cart: 'Cart',
+    order: 'Order'
+} as const;
+
+export type IModels = IValueOf<typeof Models>;

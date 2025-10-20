@@ -5,7 +5,7 @@ import {Product} from '@/models';
 
 const getAdminProducts: RequestHandler = async (_, res) => {
     try {
-        const products = await Product.findAll();
+        const products = await Product.find();
         res.render('admin/products', {
             path: Routes.adminProducts,
             title: 'Products',

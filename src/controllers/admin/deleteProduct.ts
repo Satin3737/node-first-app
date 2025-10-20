@@ -6,7 +6,7 @@ import {Product} from '@/models';
 const deleteProduct: RequestHandler = async (req, res) => {
     try {
         const id = req.body.id;
-        await Product.delete(id);
+        await Product.findByIdAndDelete(id);
         res.redirect(Routes.adminProducts);
     } catch (error) {
         logger.error(error, 'Error deleting product');

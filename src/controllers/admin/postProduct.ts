@@ -20,8 +20,7 @@ const postProduct: RequestHandler = async (req, res) => {
         }
 
         const {id, ...restData} = data;
-        const product = new Product({...restData, userId});
-        id ? await Product.update(id, product) : await product.create();
+        id ? await Product.findByIdAndUpdate(id, restData) : await new Product({...restData, userId}).save();
 
         res.redirect(Routes.adminProducts);
     } catch (error) {
