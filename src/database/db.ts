@@ -1,4 +1,4 @@
-import {MongoClient} from 'mongodb';
+import mongoose from 'mongoose';
 import {logger} from '@/utils';
 
 const database = process.env.MONGO_INITDB_DATABASE;
@@ -10,14 +10,9 @@ if (!database || !host || !port) {
     process.exit(1);
 }
 
-const client = new MongoClient(`mongodb://${host}:${port}/${database}`);
-const db = client.db(database);
-
-try {
+const initializeMongoServer = async () => {
     logger.info('Connecting to MongoDB...');
-    client.connect().then(() => logger.info('Connected to MongoDB'));
-} catch (error) {
-    logger.error(error, 'Failed to connect to MongoDB');
-}
+    await mongoose.connect(`mongodb://${host}:${port}/${database}`);
+};
 
-export default db;
+export default initializeMongoServer;

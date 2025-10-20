@@ -1,7 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 import pinoHttp from 'pino-http';
-import db from '@/database/db';
+import initializeMongoServer from '@/database/db';
 import {Port, PublicDir, ViewsDir} from '@/const';
 import {logger} from '@/utils';
 import {adminRouter, notFoundRouter, shopRouter} from '@/routes';
@@ -26,8 +26,7 @@ const appRoutes = [shopRouter, adminRouter, notFoundRouter];
 
 app.use([...middlewares, ...appRoutes]);
 
-db.admin()
-    .ping()
+initializeMongoServer()
     .then(() => {
         app.listen(Port, () => logger.info(`Server running on http://localhost:${Port}`));
     })
