@@ -1,4 +1,4 @@
-import {IValueOf} from '@/interfaces';
+import type {IValueOf} from '@/interfaces';
 
 export const Routes = {
     shop: '/',
@@ -16,19 +16,9 @@ export const Routes = {
 
 export type IRoute = IValueOf<typeof Routes>;
 
-export const Collections = {
-    users: 'users',
-    products: 'products',
-    carts: 'carts',
-    orders: 'orders'
-} as const;
-
-export type ICollection = IValueOf<typeof Collections>;
-
 export const Models = {
     user: 'User',
     product: 'Product',
-    cart: 'Cart',
     order: 'Order'
 } as const;
 

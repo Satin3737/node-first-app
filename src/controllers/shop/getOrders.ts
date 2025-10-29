@@ -1,4 +1,4 @@
-import {RequestHandler} from 'express';
+import type {RequestHandler} from 'express';
 import {Routes} from '@/interfaces';
 import {logger} from '@/utils';
 import {Order} from '@/models';
@@ -8,7 +8,7 @@ const getOrders: RequestHandler = async (req, res) => {
         const user = req.user;
         if (!user) return res.status(401).render('other/not-found', {title: 'User not found'});
 
-        const orders = await Order.findByUserId(user._id);
+        const orders = await Order.find({user: user._id});
 
         res.render('shop/orders', {
             path: Routes.orders,
