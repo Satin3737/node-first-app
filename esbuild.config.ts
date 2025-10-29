@@ -10,6 +10,8 @@ esbuild
         bundle: true,
         minify: true,
         sourcemap: true,
+        packages: 'external',
+        format: 'esm',
         platform: 'node',
         outdir: 'dist',
         loader: {'.ejs': 'copy'},
