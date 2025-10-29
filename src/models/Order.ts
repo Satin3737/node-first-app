@@ -1,36 +1,25 @@
-import {ObjectId} from 'mongodb';
-import db from '@/database/db';
-import {Collections, IId} from '@/interfaces';
-import {getId} from '@/utils';
-import {Product} from '@/models';
+import {Document, Schema, model} from 'mongoose';
+import {Models} from '@/interfaces';
+import type {IRawProduct} from '@/models';
 
-interface IOrder {
-    _id?: IId;
-    userId: ObjectId;
-    products: {product: Product; quantity: number}[];
+export interface IOrder extends Document<Schema.Types.ObjectId> {
+    user: Schema.Types.ObjectId;
+    products: {
+        product: IRawProduct;
+        quantity: number;
+    }[];
 }
 
-class Order implements IOrder {
-    declare public _id: ObjectId;
-    declare public readonly userId: ObjectId;
-    declare public products: {product: Product; quantity: number}[];
+const orderSchema = new Schema<IOrder>({
+    user: {type: Schema.Types.ObjectId, ref: Models.user, required: true},
+    products: [
+        {
+            product: {type: Object, required: true},
+            quantity: {type: Number, required: true}
+        }
+    ]
+});
 
-    constructor({_id, userId, products}: IOrder) {
-        this._id = _id ? (_id instanceof ObjectId ? _id : getId(_id)) : new ObjectId();
-        this.userId = userId;
-        this.products = products;
-    }
-
-    public async create() {
-        const result = await db.collection<Order>(Collections.orders).insertOne(this);
-        this._id = result.insertedId;
-        return result;
-    }
-
-    public static async findByUserId(userId: ObjectId) {
-        const orders = await db.collection<Order>(Collections.orders).find({userId}).toArray();
-        return orders.map(order => new Order(order));
-    }
-}
+const Order = model<IOrder>(Models.order, orderSchema);
 
 export default Order;
