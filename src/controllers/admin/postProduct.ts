@@ -1,4 +1,4 @@
-import {RequestHandler} from 'express';
+import type {RequestHandler} from 'express';
 import {z} from 'zod';
 import {Routes} from '@/interfaces';
 import {logger} from '@/utils';
@@ -7,8 +7,8 @@ import {Product} from '@/models';
 
 const postProduct: RequestHandler = async (req, res) => {
     try {
-        const userId = req.user?._id;
-        if (!userId) return res.status(401).render('other/not-found', {title: 'Unauthorized access.'});
+        const user = req.user?._id;
+        if (!user) return res.status(401).render('other/not-found', {title: 'Unauthorized access.'});
 
         const {success, data, error} = PostProductRequestSchema.safeParse(req.body);
 
@@ -20,7 +20,7 @@ const postProduct: RequestHandler = async (req, res) => {
         }
 
         const {id, ...restData} = data;
-        id ? await Product.findByIdAndUpdate(id, restData) : await new Product({...restData, userId}).save();
+        id ? await Product.findByIdAndUpdate(id, restData) : await new Product({...restData, user}).save();
 
         res.redirect(Routes.adminProducts);
     } catch (error) {

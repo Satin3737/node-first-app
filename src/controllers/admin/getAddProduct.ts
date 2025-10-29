@@ -1,4 +1,4 @@
-import {RequestHandler} from 'express';
+import type {RequestHandler} from 'express';
 
 const getAddProduct: RequestHandler = (_, res) => {
     res.render('admin/manage-product', {
