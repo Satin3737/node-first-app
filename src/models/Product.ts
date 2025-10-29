@@ -1,14 +1,24 @@
-import {Schema, model} from 'mongoose';
+import {Document, type InferRawDocType, Schema, model} from 'mongoose';
 import {Models} from '@/interfaces';
 
-const productSchema = new Schema({
+export interface IProduct extends Document<Schema.Types.ObjectId> {
+    title: string;
+    imageUrl: string;
+    description: string;
+    price: number;
+    user: Schema.Types.ObjectId;
+}
+
+const productSchema = new Schema<IProduct>({
     title: {type: String, required: true},
     imageUrl: {type: String, required: true},
     description: {type: String, required: true},
     price: {type: Number, required: true},
-    userId: {type: Schema.Types.ObjectId, ref: Models.user, required: true}
+    user: {type: Schema.Types.ObjectId, ref: Models.user, required: true}
 });
 
-const Product = model(Models.product, productSchema);
+const Product = model<IProduct>(Models.product, productSchema);
+
+export type IRawProduct = InferRawDocType<typeof productSchema>;
 
 export default Product;
