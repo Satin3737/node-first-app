@@ -2,6 +2,9 @@ import type {IValueOf} from '@/interfaces';
 
 export const Routes = {
     shop: '/',
+    login: '/login',
+    signup: '/signup',
+    logout: '/logout',
     product: '/product/:productId',
     cart: '/cart',
     removeFromCart: '/cart/remove',
@@ -23,3 +26,15 @@ export const Models = {
 } as const;
 
 export type IModels = IValueOf<typeof Models>;
+
+export const ProtectedRoutes = [
+    Routes.cart,
+    Routes.removeFromCart,
+    Routes.createOrder,
+    Routes.orders,
+    Routes.addProduct,
+    Routes.editProduct,
+    Routes.editProductById,
+    Routes.deleteProduct,
+    Routes.adminProducts
+] as string[];
