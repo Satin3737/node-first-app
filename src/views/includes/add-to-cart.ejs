@@ -1,4 +1,6 @@
-<form action="/cart" method="POST">
-    <input type="hidden" name="productId" value="<%= productId %>">
-    <button class="btn">Add to Cart</button>
-</form>
+<% if (typeof isLoggedIn !== 'undefined' && isLoggedIn) { %>
+    <form action="/cart" method="POST">
+        <input type="hidden" name="productId" value="<%= productId %>">
+        <button class="btn">Add to Cart</button>
+    </form>
+<% } %>
