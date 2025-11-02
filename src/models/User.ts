@@ -5,6 +5,7 @@ import type {IProduct} from '@/models';
 export interface IUser extends Document<Schema.Types.ObjectId> {
     name: string;
     email: string;
+    password: string;
     cart: {
         items: {
             product: Schema.Types.ObjectId;
@@ -32,6 +33,7 @@ const userSchema = new Schema<IUser>(
     {
         name: {type: String, required: true},
         email: {type: String, required: true},
+        password: {type: String, required: true},
         cart: {type: cartItemSchema, required: true, default: {items: []}}
     },
     {
