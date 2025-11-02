@@ -10,9 +10,11 @@ if (!database || !host || !port) {
     process.exit(1);
 }
 
+export const mongoUrl = `mongodb://${host}:${port}/${database}`;
+
 const initializeMongoServer = async () => {
     logger.info('Connecting to MongoDB...');
-    await mongoose.connect(`mongodb://${host}:${port}/${database}`);
+    await mongoose.connect(mongoUrl);
 };
 
 export default initializeMongoServer;

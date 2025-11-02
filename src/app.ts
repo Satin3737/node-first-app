@@ -1,11 +1,13 @@
+import MongoStore from 'connect-mongo';
 import cors from 'cors';
 import express from 'express';
+import expressSession from 'express-session';
 import pinoHttp from 'pino-http';
-import initializeMongoServer from '@/database/db';
+import initializeMongoServer, {mongoUrl} from '@/database/db';
 import {Port, PublicDir, ViewsDir} from '@/const';
 import {logger} from '@/utils';
-import {adminRouter, notFoundRouter, shopRouter} from '@/routes';
-import {dummyUser} from '@/middlewares';
+import {adminRouter, authRouter, notFoundRouter, shopRouter} from '@/routes';
+import {currentUser, locals, protectedRoutes} from '@/middlewares';
 
 const app = express();
 
@@ -18,19 +20,26 @@ const middlewares = [
     express.json(),
     express.urlencoded({extended: true}),
     express.static(PublicDir),
+    expressSession({
+        secret: 'secret-key',
+        resave: false,
+        saveUninitialized: false,
+        store: MongoStore.create({mongoUrl})
+    }),
     pinoHttp({logger, autoLogging: false}),
-    dummyUser
+    protectedRoutes,
+    currentUser,
+    locals
 ];
 
-const appRoutes = [shopRouter, adminRouter, notFoundRouter];
+const appRoutes = [authRouter, shopRouter, adminRouter, notFoundRouter];
 
 app.use([...middlewares, ...appRoutes]);
 
-initializeMongoServer()
-    .then(() => {
-        app.listen(Port, () => logger.info(`Server running on http://localhost:${Port}`));
-    })
-    .catch(error => {
-        logger.error(error, 'Failed to connect to MongoDB');
-        process.exit(1);
-    });
+try {
+    await initializeMongoServer();
+    app.listen(Port, () => logger.info(`Server running on http://localhost:${Port}`));
+} catch (error) {
+    logger.error(error, 'Failed to connect to MongoDB');
+    process.exit(1);
+}
