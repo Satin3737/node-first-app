@@ -2,7 +2,9 @@ import bcrypt from 'bcryptjs';
 import type {RequestHandler} from 'express';
 import {z} from 'zod';
 import {Routes} from '@/interfaces';
+import {SignupEmailTemplate} from '@/const';
 import {logger} from '@/utils';
+import {MailerService} from '@/services';
 import {PostSignupRequestSchema} from '@/schemas';
 import {User} from '@/models';
 
@@ -26,6 +28,8 @@ const postSignup: RequestHandler = async (req, res) => {
 
         const user = new User({name, email, password: hash});
         await user.save();
+
+        MailerService.sendMail({to: email, html: SignupEmailTemplate(name)});
 
         res.redirect(Routes.login);
     } catch (error) {

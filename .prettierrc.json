@@ -13,6 +13,7 @@
         "^@/interfaces(.*)$",
         "^@/const(.*)$",
         "^@/utils(.*)$",
+        "^@/services(.*)$",
         "^@/routes(.*)$",
         "^@/middlewares(.*)$",
         "^@/schemas(.*)$",
