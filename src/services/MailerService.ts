@@ -18,17 +18,12 @@ class MailerService {
         this.client = nodemailer.createTransport(mg(this.config));
     }
 
-    public sendMail({to, html}: {to: string; html: string}): void {
-        this.client.sendMail(
-            {
-                from: this.sender,
-                to,
-                html
-            },
-            (err, info) => {
-                err ? logger.error(`Error: ${err}`) : logger.info(`Response: ${info}`);
-            }
-        );
+    public sendMail({to, html}: {to: string; html: string}): Promise<SentMessageInfo> | void {
+        try {
+            return this.client.sendMail({from: this.sender, to, html});
+        } catch (error) {
+            logger.error(error, 'Error sending email');
+        }
     }
 }
 

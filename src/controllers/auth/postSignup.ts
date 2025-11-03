@@ -29,7 +29,7 @@ const postSignup: RequestHandler = async (req, res) => {
         const user = new User({name, email, password: hash});
         await user.save();
 
-        MailerService.sendMail({to: email, html: SignupEmailTemplate(name)});
+        void MailerService.sendMail({to: email, html: SignupEmailTemplate(name)});
 
         res.redirect(Routes.login);
     } catch (error) {
