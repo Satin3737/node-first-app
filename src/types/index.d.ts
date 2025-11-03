@@ -13,3 +13,17 @@ declare module 'express-session' {
         userId?: IUser['_id'];
     }
 }
+
+declare global {
+    namespace NodeJS {
+        interface ProcessEnv {
+            DB_HOST: string;
+            DB_PORT: number;
+            MONGO_INITDB_DATABASE: string;
+            MONGO_INITDB_ROOT_USERNAME: string;
+            MONGO_INITDB_ROOT_PASSWORD: string;
+            MAILGUN_API_KEY: string;
+            MAILGUN_DOMAIN: string;
+        }
+    }
+}
