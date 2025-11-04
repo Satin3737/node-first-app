@@ -1,6 +1,11 @@
 .login-form {
-  width: 20rem;
-  max-width: 90%;
-  margin: auto;
-  display: block;
+    width: 20rem;
+    max-width: 90%;
+    margin: auto;
+    display: block;
+}
+
+.reset-link {
+    width: fit-content;
+    margin: 24px auto;
 }
