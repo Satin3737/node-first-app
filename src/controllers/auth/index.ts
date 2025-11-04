@@ -1,5 +1,9 @@
 export {default as getLogin} from './getLogin';
+export {default as getNewPassword} from './getNewPassword';
+export {default as getReset} from './getReset';
 export {default as getSignup} from './getSignup';
 export {default as postLogin} from './postLogin';
 export {default as postLogout} from './postLogout';
+export {default as postNewPassword} from './postNewPassword';
+export {default as postReset} from './postReset';
 export {default as postSignup} from './postSignup';
