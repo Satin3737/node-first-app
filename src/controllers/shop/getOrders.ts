@@ -8,7 +8,7 @@ const getOrders: RequestHandler = async (req, res) => {
         const user = req.user;
         if (!user) return res.status(401).render('other/not-found', {title: 'User not found'});
 
-        const orders = await Order.find({user: user._id});
+        const orders = await Order.find({user: user._id}).lean();
 
         res.render('shop/orders', {
             path: Routes.orders,

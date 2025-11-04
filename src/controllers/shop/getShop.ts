@@ -5,7 +5,8 @@ import {Product} from '@/models';
 
 const getShop: RequestHandler = async (_, res) => {
     try {
-        const products = await Product.find();
+        const products = await Product.find().lean();
+
         res.render('shop/products', {
             path: Routes.shop,
             title: 'Shop',

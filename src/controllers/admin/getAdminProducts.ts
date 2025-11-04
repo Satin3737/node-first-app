@@ -3,9 +3,13 @@ import {Routes} from '@/interfaces';
 import {logger} from '@/utils';
 import {Product} from '@/models';
 
-const getAdminProducts: RequestHandler = async (_, res) => {
+const getAdminProducts: RequestHandler = async (req, res) => {
     try {
-        const products = await Product.find();
+        const user = req.user;
+        if (!user) return res.status(400).render('other/not-found', {title: 'User not found'});
+
+        const products = await Product.find({user}).lean();
+
         res.render('admin/products', {
             path: Routes.adminProducts,
             title: 'Products',

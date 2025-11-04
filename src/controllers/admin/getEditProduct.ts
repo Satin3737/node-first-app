@@ -6,7 +6,7 @@ import {Product} from '@/models';
 const getEditProduct: RequestHandler = async (req, res) => {
     try {
         const id = req.params.productId?.trim();
-        const product = await Product.findById(id);
+        const product = await Product.findById(id).lean();
 
         if (!product) res.status(404).render('other/not-found', {title: 'Product not found'});
 
