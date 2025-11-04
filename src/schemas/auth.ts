@@ -31,3 +31,9 @@ export const PostSignupRequestSchema = z
     });
 
 export type IPostSignupRequest = z.infer<typeof PostSignupRequestSchema>;
+
+export const PostNewPasswordRequestSchema = PostSignupRequestSchema.omit({name: true, email: true}).extend({
+    userId: z.string().min(1, 'User ID is required')
+});
+
+export type IPostNewPasswordRequest = z.infer<typeof PostNewPasswordRequestSchema>;
