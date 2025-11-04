@@ -1,12 +1,13 @@
 import nodemailer, {type Transporter} from 'nodemailer';
 import mg from 'nodemailer-mailgun-transport';
+import type {Options as MailOptions} from 'nodemailer/lib/mailer';
 import type {Options, SentMessageInfo} from 'nodemailer/lib/smtp-transport';
 import {logger} from '@/utils';
 
 class MailerService {
     private readonly sender: string;
     private readonly config: mg.Options;
-    public readonly client: Transporter<SentMessageInfo, Options>;
+    private readonly client: Transporter<SentMessageInfo, Options>;
 
     constructor() {
         const api_key = process.env.MAILGUN_API_KEY;
@@ -18,9 +19,9 @@ class MailerService {
         this.client = nodemailer.createTransport(mg(this.config));
     }
 
-    public sendMail({to, html}: {to: string; html: string}): Promise<SentMessageInfo> | void {
+    public sendMail(options: MailOptions): Promise<SentMessageInfo> | void {
         try {
-            return this.client.sendMail({from: this.sender, to, html});
+            return this.client.sendMail({from: this.sender, ...options});
         } catch (error) {
             logger.error(error, 'Error sending email');
         }
