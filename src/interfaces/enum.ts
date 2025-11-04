@@ -5,6 +5,7 @@ export const Routes = {
     login: '/login',
     signup: '/signup',
     logout: '/logout',
+    reset: '/reset',
     product: '/product/:productId',
     cart: '/cart',
     removeFromCart: '/cart/remove',
