@@ -6,6 +6,8 @@ export interface IUser extends Document<Schema.Types.ObjectId> {
     name: string;
     email: string;
     password: string;
+    resetToken?: string;
+    resetTokenExpiration?: Date;
     cart: {
         items: {
             product: Schema.Types.ObjectId;
@@ -34,6 +36,8 @@ const userSchema = new Schema<IUser>(
         name: {type: String, required: true},
         email: {type: String, required: true},
         password: {type: String, required: true},
+        resetToken: {type: String},
+        resetTokenExpiration: {type: Date},
         cart: {type: cartItemSchema, required: true, default: {items: []}}
     },
     {
