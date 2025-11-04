@@ -7,7 +7,9 @@ export const RootDir = path.dirname(__filename);
 export const PublicDir = 'public';
 export const ViewsDir = path.join(RootDir, 'views');
 
-export const Port = 3000;
+export const Port = Number(process.env.PORT) || 3000;
+export const BaseUrl = process.env.BASE_URL || 'http://localhost';
+export const BaseUrlWithPort = `${BaseUrl}:${Port}`;
 
 export const SignupEmailTemplate = (name: string) => `
     <h1>
@@ -15,5 +17,14 @@ export const SignupEmailTemplate = (name: string) => `
     </h1>
     <p>
         Thank you for signing up. We're excited to have you on board.
+    </p>
+`;
+
+export const ResetPasswordEmailTemplate = (link: string) => `
+    <h1>
+        Your password reset link
+    </h1>
+    <p>
+        Click <a href="${link}">here</a> to reset your password. This link will expire in one hour.
     </p>
 `;

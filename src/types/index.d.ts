@@ -17,6 +17,8 @@ declare module 'express-session' {
 declare global {
     namespace NodeJS {
         interface ProcessEnv {
+            BASE_URL: string;
+            PORT: number;
             DB_HOST: string;
             DB_PORT: number;
             MONGO_INITDB_DATABASE: string;
