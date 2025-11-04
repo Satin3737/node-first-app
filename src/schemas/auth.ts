@@ -1,5 +1,11 @@
 import {z} from 'zod';
 
+export const PostResetRequestSchema = z.object({
+    email: z.email('Invalid email address')
+});
+
+export type IPostResetRequest = z.infer<typeof PostResetRequestSchema>;
+
 export const PostLoginRequestSchema = z.object({
     email: z.email('Invalid email address'),
     password: z
