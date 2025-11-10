@@ -5,11 +5,14 @@ const __filename = fileURLToPath(import.meta.url);
 
 export const RootDir = path.dirname(__filename);
 export const PublicDir = 'public';
+export const UploadsDir = 'uploads';
 export const ViewsDir = path.join(RootDir, 'views');
 
 export const Port = Number(process.env.PORT) || 3000;
 export const BaseUrl = process.env.BASE_URL || 'http://localhost';
 export const BaseUrlWithPort = `${BaseUrl}:${Port}`;
+
+export const MaxUploadSize = 5 * 1024 * 1024;
 
 export const SignupEmailTemplate = (name: string) => `
     <h1>

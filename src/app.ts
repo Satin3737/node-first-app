@@ -4,7 +4,7 @@ import express from 'express';
 import expressSession from 'express-session';
 import pinoHttp from 'pino-http';
 import initializeMongoServer, {mongoUrl} from '@/database/db';
-import {Port, PublicDir, ViewsDir} from '@/const';
+import {Port, PublicDir, UploadsDir, ViewsDir} from '@/const';
 import {logger} from '@/utils';
 import {adminRouter, authRouter, notFoundRouter, shopRouter} from '@/routes';
 import {currentUser, locals, protectedRoutes} from '@/middlewares';
@@ -34,6 +34,7 @@ const middlewares = [
 
 const appRoutes = [authRouter, shopRouter, adminRouter, notFoundRouter];
 
+app.use(`/${UploadsDir}`, express.static(UploadsDir));
 app.use([...middlewares, ...appRoutes]);
 
 try {
