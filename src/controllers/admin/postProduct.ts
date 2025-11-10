@@ -11,6 +11,7 @@ const postProduct: RequestHandler = async (req, res) => {
         if (!user) return res.status(401).render('other/not-found', {title: 'Unauthorized access.'});
 
         const {success, data, error} = PostProductRequestSchema.safeParse(req.body);
+        const imageFile = req.file;
 
         if (!success) {
             return res.status(400).render('other/not-found', {
@@ -20,7 +21,15 @@ const postProduct: RequestHandler = async (req, res) => {
         }
 
         const {id, ...restData} = data;
-        id ? await Product.findByIdAndUpdate(id, restData) : await new Product({...restData, user}).save();
+
+        if (!id && !imageFile) return res.status(400).render('other/not-found', {title: 'Image upload failed.'});
+        const imageUrl = imageFile?.path;
+
+        if (id) {
+            await Product.findByIdAndUpdate(id, {...restData, ...(imageUrl && {imageUrl})});
+        } else {
+            await new Product({...restData, imageUrl, user}).save();
+        }
 
         res.redirect(Routes.adminProducts);
     } catch (error) {

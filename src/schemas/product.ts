@@ -1,5 +1,14 @@
 import {z} from 'zod';
 
+export const ProductImageSchema = z.object({
+    fieldname: z.string(),
+    originalname: z.string(),
+    encoding: z.string(),
+    mimetype: z.string().refine(type => type.startsWith('image/'), 'Invalid image file')
+});
+
+export type IProductImage = z.infer<typeof ProductImageSchema>;
+
 export const PostProductRequestSchema = z.object({
     id: z.string().optional(),
     title: z
@@ -7,7 +16,6 @@ export const PostProductRequestSchema = z.object({
         .trim()
         .min(3, 'Title must be at least 3 characters long')
         .max(100, 'Title must be at most 100 characters long'),
-    imageUrl: z.url('Invalid Image URL'),
     description: z
         .string()
         .trim()
