@@ -17,17 +17,11 @@ const getInvoice: RequestHandler = async (req, res) => {
 
         const invoice = `${orderId}.pdf`;
         const invoicePath = path.join(InvoicesDir, invoice);
+        const file = fs.createReadStream(invoicePath);
 
-        fs.readFile(invoicePath, (err, data) => {
-            if (err) {
-                logger.error(err, 'Error reading invoice file');
-                return res.status(404).render('other/not-found', {title: 'Invoice not found'});
-            }
-
-            res.setHeader('Content-Type', 'application/pdf');
-            res.setHeader('Content-Disposition', `inline; filename="${invoice}"`);
-            res.send(data);
-        });
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `inline; filename="${invoice}"`);
+        file.pipe(res);
     } catch (error) {
         logger.error(error, 'Error fetching orders');
         return res.status(500).render('other/not-found', {title: 'Failed to fetch invoice.'});
