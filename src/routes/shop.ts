@@ -1,6 +1,15 @@
 import {Router} from 'express';
 import {Routes} from '@/interfaces';
-import {getCart, getOrders, getProduct, getShop, postCart, postOrder, removeFromCart} from '@/controllers/shop';
+import {
+    getCart,
+    getInvoice,
+    getOrders,
+    getProduct,
+    getShop,
+    postCart,
+    postOrder,
+    removeFromCart
+} from '@/controllers/shop';
 
 const shopRouter = Router();
 
@@ -10,6 +19,7 @@ shopRouter.get(Routes.cart, getCart);
 shopRouter.post(Routes.cart, postCart);
 shopRouter.post(Routes.removeFromCart, removeFromCart);
 shopRouter.get(Routes.orders, getOrders);
+shopRouter.get(Routes.invoices, getInvoice);
 shopRouter.post(Routes.createOrder, postOrder);
 
 export default shopRouter;

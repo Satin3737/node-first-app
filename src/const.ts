@@ -5,7 +5,9 @@ const __filename = fileURLToPath(import.meta.url);
 
 export const RootDir = path.dirname(__filename);
 export const PublicDir = 'public';
-export const UploadsDir = 'uploads';
+export const StorageDir = 'storage';
+export const UploadsDir = `${StorageDir}/uploads`;
+export const InvoicesDir = `${StorageDir}/invoices`;
 export const ViewsDir = path.join(RootDir, 'views');
 
 export const Port = Number(process.env.PORT) || 3000;

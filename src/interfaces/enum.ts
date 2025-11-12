@@ -12,6 +12,7 @@ export const Routes = {
     removeFromCart: '/cart/remove',
     createOrder: '/create-order',
     orders: '/orders',
+    invoices: '/invoices/:orderId',
     addProduct: '/admin/add-product',
     editProduct: '/admin/edit-product',
     editProductById: '/admin/edit-product/:productId',
