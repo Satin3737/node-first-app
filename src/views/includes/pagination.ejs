@@ -1,15 +1,15 @@
 <% if (totalPages > 1) { %>
     <div class="pagination">
         <% if (page > 1) { %>
-            <a href="<%= path %>?page=<%= page - 1 %>"><</a>
+            <a href="?page=<%= page - 1 %>"><</a>
         <% } %>
         <% for (const pageNumber of Array.from({length: totalPages}, (_, i) => i + 1)) { %>
-            <a href="<%= path %>?page=<%= pageNumber %>" class="<%= page === pageNumber ? 'current' : '' %>">
+            <a href="?page=<%= pageNumber %>" class="<%= page === pageNumber ? 'current' : '' %>">
                 <%= pageNumber %>
             </a>
         <% } %>
         <% if (page < totalPages) { %>
-            <a href="<%= path %>?page=<%= page + 1 %>">></a>
+            <a href="?page=<%= page + 1 %>">></a>
         <% } %>
     </div>
 <% } %>
