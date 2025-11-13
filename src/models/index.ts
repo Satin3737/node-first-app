@@ -1,3 +1,3 @@
-export {default as Order} from './Order';
-export {default as Product, type IProduct, type IRawProduct} from './Product';
+export {default as Order, type IOrder} from './Order';
+export {default as Product, type IProduct} from './Product';
 export {default as User, type IUser} from './User';

@@ -1,4 +1,4 @@
-import {Document, type InferRawDocType, Schema, model} from 'mongoose';
+import {Document, Schema, model} from 'mongoose';
 import {Models} from '@/interfaces';
 
 export interface IProduct extends Document<Schema.Types.ObjectId> {
@@ -18,7 +18,5 @@ const productSchema = new Schema<IProduct>({
 });
 
 const Product = model<IProduct>(Models.product, productSchema);
-
-export type IRawProduct = InferRawDocType<typeof productSchema>;
 
 export default Product;

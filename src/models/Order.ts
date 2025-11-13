@@ -1,11 +1,11 @@
 import {Document, Schema, model} from 'mongoose';
 import {Models} from '@/interfaces';
-import type {IRawProduct} from '@/models';
+import type {IProduct} from '@/models';
 
 export interface IOrder extends Document<Schema.Types.ObjectId> {
     user: Schema.Types.ObjectId;
     products: {
-        product: IRawProduct;
+        product: IProduct;
         quantity: number;
     }[];
 }
