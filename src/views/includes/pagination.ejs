@@ -1,6 +1,6 @@
 <% if (totalPages > 1) { %>
     <div class="pagination">
-        <% if (hasPrevPage) { %>
+        <% if (page > 1) { %>
             <a href="<%= path %>?page=<%= page - 1 %>"><</a>
         <% } %>
         <% for (const pageNumber of Array.from({length: totalPages}, (_, i) => i + 1)) { %>
@@ -8,7 +8,7 @@
                 <%= pageNumber %>
             </a>
         <% } %>
-        <% if (hasNextPage) { %>
+        <% if (page < totalPages) { %>
             <a href="<%= path %>?page=<%= page + 1 %>">></a>
         <% } %>
     </div>

@@ -16,6 +16,7 @@ export const BaseUrl = process.env.BASE_URL || 'http://localhost';
 export const BaseUrlWithPort = `${BaseUrl}:${Port}`;
 
 export const MaxUploadSize = 5 * 1024 * 1024;
+export const ProductsPerPage = 2;
 
 export const SignupEmailTemplate = (name: string) => `
     <h1>
